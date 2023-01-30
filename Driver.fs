@@ -1,6 +1,8 @@
 module Transactions.Driver
 
 open System
+open Transactions.Domain
+open Transactions.Rules.Accounts
 
 module UserConsole =
 
@@ -12,22 +14,21 @@ module UserConsole =
         Console.Write("Enter the amount of the transaction: ")
         Console.ReadLine() |> Decimal.Parse
 
-    let userLoop() =
-        let mutable running = true
-        let mutable balance = 0m
-
-        while running do
-            printfn "Balance: %A" balance
+    let run () = 
+        let rec loop account =
+            printfn "Balance: %A" account.Balance
 
             let action = promptUser()
             printfn "You told me to do this: %A" action
 
-            balance <-
-            match action with
-                | "d" -> balance + getAmount()
-                | "w" -> balance - getAmount()
+            match action with 
+                | "d" -> loop (deposit(getAmount()) account) 
+                | "w" -> loop (withdraw(getAmount()) account)
+                | "x" -> ()
                 | _ -> 
-                    running <- action <> "x"
-                    balance
+                    printfn $"Invalid Action: {action}" 
+                    loop account
+        loop Account.Default
+        ()
         
         

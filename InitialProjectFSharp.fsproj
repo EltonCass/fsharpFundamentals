@@ -6,6 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="Domain.fs" />
+    <Compile Include="Rules.fs" />
     <Compile Include="Driver.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
