@@ -5,19 +5,28 @@ open System.IO
 
 module Account =
     open Transaction.Utils.Json.Serialization
+    open Transaction.Utils.Railway
 
     let private getAccountFileName accountId = $"account_{accountId}.json"
 
-    let private getAccountData accountId = getAccountFileName accountId |> File.ReadAllText
+    let private getAccountData accountId = 
+        try
+            getAccountFileName accountId |> File.ReadAllText |> Ok
+        with e -> Error e.Message
 
-    let private buildAccount json : Account = json |> deserialize
+    let private buildAccount json : Result<Account, string> =
+        try
+            json |> deserialize |> Ok
+        with e -> Error e.Message
 
     let private save account =
-        (getAccountFileName account.Id, serialize account)
-        |> File.WriteAllText
+        try 
+            (getAccountFileName account.Id, serialize account)
+            |> File.WriteAllText
+            Ok account
+        with e -> Error e.Message
     
-    let get (accountId:int) : Account = accountId |> getAccountData |> buildAccount
+    let get accountId = accountId |> getAccountData >>= buildAccount
 
     let put account = 
         account |> save
-        account

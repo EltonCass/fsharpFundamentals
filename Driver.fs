@@ -4,6 +4,8 @@ open System
 open System.IO
 open Transactions.Domain
 open Transactions.Rules.Accounts
+open Repository.Account
+open Transaction.Utils.Railway
 
 module Utils =
     let deleteAccountRepoFiles () =
@@ -15,23 +17,25 @@ module AccountRepoDriver =
 
         Account.Default
         |> deposit 100m
-        |> withdraw 30m
-        |> Repository.Account.put
+        |> withdraw 25m
+        |> put
+        |> ignore
+
+        get 0 |> printfn "%A"
+        get 1 |> printfn "%A"
+
+        get 0
+        >>> deposit 40m
+        >>= put
+        |> ignore
+
+        get 0
         |> printfn "%A"
 
-        let account = Repository.Account.get 0
-        account |> printfn "%A"
-
-        account
-        |> withdraw 20m
-        |> Repository.Account.put
+        get 1
+        >>> deposit 40m
+        >>= put
         |> printfn "%A"
-
-        Repository.Account.get 0
-        |> printfn "%A"
-
-        // Repository.Account.get 1
-        // |> printfn "%A"
 
 module UserConsole =
 
