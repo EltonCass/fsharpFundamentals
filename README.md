@@ -14,7 +14,7 @@ The following concepts are demonstrated in this project:
 
 ## Requirements
 To run this project, you will need:
-.NET 7.0 SDK installed on your machine. You can download it here.
+.NET 7.0 SDK installed on your machine. You can download it [here](https://dotnet.microsoft.com/en-us/download).
 
 ## Usage
 To run the project, navigate to the root directory and execute the following commands
